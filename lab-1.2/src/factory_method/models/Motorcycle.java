@@ -1,6 +1,10 @@
-import java.util.Objects;
+package factory_method.models;
 
-public class Motorcycle {
+import factory_method.exeption.DuplicateModelNameException;
+import factory_method.exeption.ModelPriceOutOfBoundsException;
+import factory_method.exeption.NoSuchModelNameException;
+
+public class Motorcycle implements Transport {
 
     private String motoBrand;
     private int size;
@@ -15,11 +19,11 @@ public class Motorcycle {
         this.size = size;
     }
 
-    public String getMotoBrand(){
+    public String getBrand(){
         return motoBrand;
     }
 
-    public void setMotoBrand(String newMotoBrand){
+    public void setBrand(String newMotoBrand){
         this.motoBrand = newMotoBrand;
     }
 
@@ -36,7 +40,10 @@ public class Motorcycle {
         return modelsName;
     }
 
-    public void setModelsNameByName(String name, String newName){
+    public void setModelsName(String name, String newName) throws DuplicateModelNameException, NoSuchModelNameException {
+        if (isModelNameExist(newName)) {
+            throw new DuplicateModelNameException("Model with name " + name + " already exists.");
+        }
         Model currentModel = head;
         while(currentModel.next != head){
             if(currentModel.next.nameModel.equals(name)){
@@ -45,9 +52,10 @@ public class Motorcycle {
             }
             currentModel = currentModel.next;
         }
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
-    public double getPriceByName(String name) throws Exception {
+    public double getPriceByNameModel(String name) throws NoSuchModelNameException {
         Model currentModel = head;
         while(currentModel.next != head){
             if(currentModel.next.nameModel.equals(name)){
@@ -55,10 +63,13 @@ public class Motorcycle {
             }
             currentModel = currentModel.next;
         }
-        throw new Exception("Model with name '" + name + "' not found!");
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
-    public void setPriceByName(String name, double newPrice) throws Exception {
+    public void setPriceByNameModel(String name, double newPrice) throws NoSuchModelNameException, ModelPriceOutOfBoundsException {
+        if (newPrice < 0) {
+            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        }
         Model currentModel = head;
         while(currentModel.next != head){
             if(currentModel.next.nameModel.equals(name)){
@@ -67,7 +78,7 @@ public class Motorcycle {
             }
             currentModel = currentModel.next;
         }
-        throw new Exception("Model with name '" + name + "' not found!");
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
     public double[] getModelsPrices() {
@@ -82,7 +93,13 @@ public class Motorcycle {
         return price;
     }
 
-    public void addModel(String name, double price){
+    public void addModel(String name, double price) throws ModelPriceOutOfBoundsException, DuplicateModelNameException {
+        if (price < 0) {
+            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        }
+        if (isModelNameExist(name)) {
+            throw new DuplicateModelNameException("Model with name " + name + " already exists.");
+        }
         Model newModel = new Model(name, price);
         Model lastModel = head.prev;
 
@@ -93,7 +110,7 @@ public class Motorcycle {
         size++;
     }
 
-    public void removeModel(String name) throws Exception {
+    public void removeModel(String name) throws NoSuchModelNameException {
         Model currentModel = head;
         while (currentModel.next != head) {
             if (currentModel.next.nameModel.equals(name)) {
@@ -104,18 +121,34 @@ public class Motorcycle {
             }
             currentModel = currentModel.next;
         }
-        throw new Exception("Model with name '" + name + "' not found!");
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
     private boolean isEmpty(){
         return size == 0;
     }
 
-    private int getSizeOfModels(){
+    public int getSizeOfModels(){
         return size;
     }
 
-    private class Model{
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return null;
+    }
+
+    private boolean isModelNameExist(String name) {
+        Model currentModel = head;
+        while (currentModel.next != head) {
+            if (currentModel.next.nameModel.equals(name)) {
+                return true;
+            }
+            currentModel = currentModel.next;
+        }
+        return false;
+    }
+
+    private class Model implements Cloneable{
         String nameModel = null;
         double price = Double.NaN;
         Model prev = null;

@@ -1,12 +1,17 @@
-import java.lang.reflect.Array;
+package factory_method.models;
+
+import factory_method.exeption.DuplicateModelNameException;
+import factory_method.exeption.ModelPriceOutOfBoundsException;
+import factory_method.exeption.NoSuchModelNameException;
+
 import java.util.*;
 
-public class Auto {
+public class Auto implements Transport {
 
     private String brand;
     private Model[] models;
 
-    private Auto(String brand, int sizeOfModels) {
+    public Auto(String brand, int sizeOfModels) {
         this.brand = brand;
         this.models = new Model[sizeOfModels];
     }
@@ -27,39 +32,41 @@ public class Auto {
         return modelsName;
     }
 
-    public void setModelsName(String oldName, String newName) {
+    public void setModelsName(String oldName, String newName) throws DuplicateModelNameException, NoSuchModelNameException {
         int i = 0;
         int j = 0;
         while (i < models.length) {
             if (models[i].name.equals(oldName)) {
                 j = i;
             } else if (models[i].name.equals(newName)) {
-                //throw new DuplicateModelNameException("Modelwith name " + newName + " already exists.");
+                throw new DuplicateModelNameException("Model with name " + newName + " already exists.");
             }
             i++;
         }
         if (j < models.length) {
             models[j].name = newName;
         } else {
-            //throw new NoSuchModelNameException("No model with name " + oldName + "  was found.");
+            throw new NoSuchModelNameException("Model with name " + oldName + " does not exist.");
         }
     }
 
-    private Model getModelByName(String name) {
+    private Model getModelByName(String name) throws NoSuchModelNameException {
         for (Model model : models) {
             if (Objects.equals(model.name, name)) {
                 return model;
             }
         }
-        //throw new NoSuchModelNameException("No model with name " + name + "  was found.");
-        return new Model();////////////////////////////////////
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
-    public double getPriceByNameModel(String name) {
+    public double getPriceByNameModel(String name) throws NoSuchModelNameException {
         return getModelByName(name).price;
     }
 
-    public void setPriceByNameModel(String name, double newPrice) {
+    public void setPriceByNameModel(String name, double newPrice) throws NoSuchModelNameException {
+        if (newPrice < 0) {
+            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        }
         getModelByName(name).price = newPrice;
     }
 
@@ -71,7 +78,10 @@ public class Auto {
         return prices;
     }
 
-    public void addModel(String name, double price){
+    public void addModel(String name, double price) throws DuplicateModelNameException, ModelPriceOutOfBoundsException {
+        if (price < 0) {
+            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        }
         int i = 0;
         int j = -1;
         while (i < models.length) {
@@ -82,21 +92,21 @@ public class Auto {
             i++;
         }
         if (j >= 0) {
-            //throw new DuplicateModelNameException("Model with name " + name + "  already exists.");
+            throw new DuplicateModelNameException("Model with name " + name + " already exists.");
         }
 
         models = Arrays.copyOf(models, models.length + 1);
         models[models.length - 1] = new Model(name, price);
     }
 
-    public void deleteModel(String name){
+    public void removeModel(String name) throws NoSuchModelNameException {
         int deleteIndex = 0;
         while ((deleteIndex < models.length)
                 && ((models[deleteIndex].name)).equals(name)) {
             deleteIndex++;
         }
         if (deleteIndex == models.length) {
-            //throw new NoSuchModelNameException("No model with name " + name + "  was found.");
+            throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
         }
         Model[] newModels = new Model[models.length - 1];
         System.arraycopy(models, 0, newModels, 0, deleteIndex);
@@ -104,8 +114,13 @@ public class Auto {
         models = newModels;
     }
 
-    public int getSizeOfModels(){
+    public int getSizeOfModels() {
         return this.models.length;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return null;
     }
 
     private class Model implements Cloneable {
