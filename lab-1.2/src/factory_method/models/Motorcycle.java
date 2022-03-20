@@ -28,11 +28,11 @@ public class Motorcycle implements Transport {
     }
 
     public String[] getModelsName() {
-        String[] modelsName = new String[getSizeOfModels()];
+        String[] modelsName = new String[getSizeOfNotNullModels()];
         Model currentModel = head;
         int count = 0;
         while(currentModel.next != head){
-            modelsName[count] = currentModel.next.nameModel;
+            modelsName[count] = currentModel.next.name;
             currentModel = currentModel.next;
             count++;
         }
@@ -40,14 +40,12 @@ public class Motorcycle implements Transport {
         return modelsName;
     }
 
-    public void setModelsName(String name, String newName) throws DuplicateModelNameException, NoSuchModelNameException {
-        if (isModelNameExist(newName)) {
-            throw new DuplicateModelNameException("Model with name " + name + " already exists.");
-        }
+    public void setModelNameByName(String name, String newName) throws DuplicateModelNameException, NoSuchModelNameException {
+        checkDuplicatedName(newName);
         Model currentModel = head;
         while(currentModel.next != head){
-            if(currentModel.next.nameModel.equals(name)){
-                currentModel.next.nameModel = newName;
+            if(currentModel.next.name.equals(name)){
+                currentModel.next.name = newName;
                 return;
             }
             currentModel = currentModel.next;
@@ -58,7 +56,7 @@ public class Motorcycle implements Transport {
     public double getPriceByNameModel(String name) throws NoSuchModelNameException {
         Model currentModel = head;
         while(currentModel.next != head){
-            if(currentModel.next.nameModel.equals(name)){
+            if(currentModel.next.name.equals(name)){
                 return currentModel.next.price;
             }
             currentModel = currentModel.next;
@@ -67,12 +65,11 @@ public class Motorcycle implements Transport {
     }
 
     public void setPriceByNameModel(String name, double newPrice) throws NoSuchModelNameException, ModelPriceOutOfBoundsException {
-        if (newPrice < 0) {
-            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
-        }
+        checkBoundsOfPrice(newPrice);
+
         Model currentModel = head;
         while(currentModel.next != head){
-            if(currentModel.next.nameModel.equals(name)){
+            if(currentModel.next.name.equals(name)){
                 currentModel.next.setPrice(newPrice);
                 return;
             }
@@ -82,7 +79,7 @@ public class Motorcycle implements Transport {
     }
 
     public double[] getModelsPrices() {
-        double[] price = new double[getSizeOfModels()];
+        double[] price = new double[getSizeOfNotNullModels()];
         Model currentModel = head;
         int count = 0;
         while(currentModel.next != head){
@@ -94,12 +91,8 @@ public class Motorcycle implements Transport {
     }
 
     public void addModel(String name, double price) throws ModelPriceOutOfBoundsException, DuplicateModelNameException {
-        if (price < 0) {
-            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
-        }
-        if (isModelNameExist(name)) {
-            throw new DuplicateModelNameException("Model with name " + name + " already exists.");
-        }
+        checkBoundsOfPrice(price);
+        checkDuplicatedName(name);
         Model newModel = new Model(name, price);
         Model lastModel = head.prev;
 
@@ -113,7 +106,7 @@ public class Motorcycle implements Transport {
     public void removeModel(String name) throws NoSuchModelNameException {
         Model currentModel = head;
         while (currentModel.next != head) {
-            if (currentModel.next.nameModel.equals(name)) {
+            if (currentModel.next.name.equals(name)) {
                 currentModel.next.prev = currentModel.prev;
                 currentModel.prev.next = currentModel.next;
                 size--;
@@ -133,37 +126,107 @@ public class Motorcycle implements Transport {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return null;
+    public int getSizeOfNotNullModels() {
+        int count = size;
+        Model currentModel = head;
+        while(currentModel.next != head){
+            if (currentModel.next == null) {
+                count--;
+            }
+        }
+        return count;
     }
 
-    private boolean isModelNameExist(String name) {
+    public void checkBoundsOfPrice(double price) {
+        if (price < 0) {
+            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        }
+    }
+
+    private void checkDuplicatedName(String name) throws DuplicateModelNameException {
         Model currentModel = head;
         while (currentModel.next != head) {
-            if (currentModel.next.nameModel.equals(name)) {
-                return true;
+            if (currentModel.next.name.equals(name)) {
+                throw new DuplicateModelNameException("Model with name " + name + " already exists.");
             }
             currentModel = currentModel.next;
         }
-        return false;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        var clone = (Motorcycle)super.clone();
+        clone.head = (Model)head.clone();
+        clone.head.prev = clone.head;
+        clone.head.next = clone.head;
+
+        Model currentModel = head;
+        while (currentModel.next != head) {
+            try {
+                clone.addModel(currentModel.next.name, currentModel.next.price);
+            } catch (DuplicateModelNameException e) {
+                e.printStackTrace();
+            }
+            currentModel = currentModel.next;
+        }
+        return clone;
     }
 
     private class Model implements Cloneable{
-        String nameModel = null;
+        String name = null;
         double price = Double.NaN;
         Model prev = null;
         Model next = null;
 
+        public Model() {}
+
         public Model(String name, double price) {
-            this.nameModel = name;
+            this.name = name;
             this.price = price;
         }
 
-        public Model() {
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getPrice() {
+            return price;
         }
 
         public void setPrice(double price) {
             this.price = price;
+        }
+
+        public Model getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Model prev) {
+            this.prev = prev;
+        }
+
+        public Model getNext() {
+            return next;
+        }
+
+        public void setNext(Model next) {
+            this.next = next;
+        }
+
+        @Override
+        public Model clone() {
+            try {
+                Model clone = (Model) super.clone();
+                clone.next = next;
+                clone.prev = prev;
+                return clone;
+            } catch (CloneNotSupportedException e) {
+                throw new AssertionError();
+            }
         }
     }
 

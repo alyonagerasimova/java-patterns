@@ -25,29 +25,26 @@ public class Auto implements Transport {
     }
 
     public String[] getModelsName() {
-        String[] modelsName = new String[models.length];
-        for (int i = 0; i < models.length; i++) {
-            modelsName[i] = models[i].name;
+        String[] modelsName = new String[getSizeOfNotNullModels()];
+        int i = 0;
+        for (Model model : this.models) {
+                if (model != null) {
+                    modelsName[i] = model.name;
+                    i++;
+                }
         }
         return modelsName;
     }
 
-    public void setModelsName(String oldName, String newName) throws DuplicateModelNameException, NoSuchModelNameException {
-        int i = 0;
-        int j = 0;
-        while (i < models.length) {
-            if (models[i].name.equals(oldName)) {
-                j = i;
-            } else if (models[i].name.equals(newName)) {
-                throw new DuplicateModelNameException("Model with name " + newName + " already exists.");
+    public void setModelNameByName(String name, String newName) throws DuplicateModelNameException, NoSuchModelNameException {
+        checkDuplicatedName(newName);
+        for (Model model : this.models) {
+            if (model != null && model.name.equals(name)) {
+                model.name = newName;
+                return;
             }
-            i++;
         }
-        if (j < models.length) {
-            models[j].name = newName;
-        } else {
-            throw new NoSuchModelNameException("Model with name " + oldName + " does not exist.");
-        }
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
     private Model getModelByName(String name) throws NoSuchModelNameException {
@@ -64,63 +61,103 @@ public class Auto implements Transport {
     }
 
     public void setPriceByNameModel(String name, double newPrice) throws NoSuchModelNameException {
-        if (newPrice < 0) {
-            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        checkBoundsOfPrice(newPrice);
+        for (Model model : this.models) {
+            if (model != null && model.name.equals(name)) {
+                model.price = newPrice;
+                return;
+            }
         }
-        getModelByName(name).price = newPrice;
+        throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
     public double[] getModelsPrices() {
-        double[] prices = new double[models.length];
-        for (int i = 0; i < models.length; i++) {
-            prices[i] = models[i].price;
+        double[] prices = new double[getSizeOfNotNullModels()];
+        int i = 0;
+        for (Model model : this.models) {
+                if (model != null) {
+                    prices[i] = model.price;
+                    i++;
+                }
         }
         return prices;
     }
 
     public void addModel(String name, double price) throws DuplicateModelNameException, ModelPriceOutOfBoundsException {
-        if (price < 0) {
-            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
-        }
-        int i = 0;
-        int j = -1;
-        while (i < models.length) {
-            if (models[i].name.equals(name)) {
-                j = i;
-                break;
-            }
-            i++;
-        }
-        if (j >= 0) {
-            throw new DuplicateModelNameException("Model with name " + name + " already exists.");
-        }
+        checkBoundsOfPrice(price);
+        checkDuplicatedName(name);
 
-        models = Arrays.copyOf(models, models.length + 1);
-        models[models.length - 1] = new Model(name, price);
+        Model newModel = new Model(name, price);
+        int indexOfNull = getIndexOfNullElement();
+        if (indexOfNull == this.models.length) {
+            this.models = Arrays.copyOf(this.models, this.models.length + 1);
+        }
+        this.models[indexOfNull] = newModel;
     }
 
     public void removeModel(String name) throws NoSuchModelNameException {
-        int deleteIndex = 0;
-        while ((deleteIndex < models.length)
-                && ((models[deleteIndex].name)).equals(name)) {
-            deleteIndex++;
+        for (int i = 0; i < this.models.length; i++) {
+            if(this.models[i] != null && this.models[i].name.equals(name)) {
+                if(i != this.models.length - 1) {
+                    System.arraycopy(this.models, ++i, this.models, --i, this.models.length - 1 - i);
+                }
+                this.models = Arrays.copyOf(this.models, this.models.length - 1);
+                return;
+            }
         }
-        if (deleteIndex == models.length) {
-            throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
-        }
-        Model[] newModels = new Model[models.length - 1];
-        System.arraycopy(models, 0, newModels, 0, deleteIndex);
-        System.arraycopy(models, deleteIndex + 1, newModels, deleteIndex, models.length - deleteIndex);
-        models = newModels;
+        throw new NoSuchModelNameException("Model with name '" + name + "' not found!");
     }
 
     public int getSizeOfModels() {
         return this.models.length;
     }
 
+    public void checkDuplicatedName(String name) throws DuplicateModelNameException {
+        for (Model model : models) {
+            if (model != null && model.name.equals(name)) {
+                throw new DuplicateModelNameException("Model with name " + name + " already exists.");
+            }
+        }
+    }
+
+    public void checkBoundsOfPrice(double price) {
+        if (price < 0) {
+            throw new ModelPriceOutOfBoundsException("The price cannot be negative");
+        }
+    }
+
+    private int getIndexOfNullElement() {
+        for (int i = 0; i < this.models.length; i++) {
+            if (this.models[i] == null) {
+                return i;
+            }
+        }
+        return this.models.length;
+    }
+
+    public int getSizeOfNotNullModels() {
+        int count = this.models.length;
+        for (Model model : this.models) {
+            if (model == null) {
+                count--;
+            }
+        }
+        return count;
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return null;
+        Auto clone = (Auto)super.clone();
+        var clonedModels =  new Model[models.length];
+        int i = 0;
+        for (Model model : models) {
+            if (model != null) {
+                clonedModels[i] = (Model) model.clone();
+                i++;
+            }
+        }
+        clone.models = clonedModels;
+        return clone;
     }
 
     private class Model implements Cloneable {
@@ -130,8 +167,8 @@ public class Auto implements Transport {
         public Model() {
         }
 
-        public Model(String nameModel, double price) {
-            this.name = nameModel;
+        public Model(String name, double price) {
+            this.name = name;
             this.price = price;
         }
 
@@ -139,19 +176,16 @@ public class Auto implements Transport {
             return name;
         }
 
-        public void setNameModel(String nameModel) {
-            this.name = nameModel;
+        public void setNameModel(String name) {
+            this.name = name;
         }
 
         @Override
-        public Model clone() {
-            try {
-                Model clone = (Model) super.clone();
-                // TODO: copy mutable state here, so the clone can't change the internals of the original
-                return clone;
-            } catch (CloneNotSupportedException e) {
-                throw new AssertionError();
-            }
+        public Model clone() throws CloneNotSupportedException {
+            Model clone = (Model)super.clone();
+            clone.name = this.name;
+            clone.price = this.price;
+            return clone;
         }
     }
 }

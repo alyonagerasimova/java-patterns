@@ -9,7 +9,7 @@ public interface Transport extends Cloneable{
 
     void setBrand(String carModel);
 
-    void setModelsName(String name, String newName) throws NoSuchModelNameException, DuplicateModelNameException;
+    void setModelNameByName(String name, String newName) throws NoSuchModelNameException, DuplicateModelNameException;
 
     String[] getModelsName();
 
@@ -24,6 +24,8 @@ public interface Transport extends Cloneable{
     void removeModel(String name) throws NoSuchModelNameException;
 
     int getSizeOfModels();
+
+    int getSizeOfNotNullModels();
 
     Object clone() throws CloneNotSupportedException;
 }

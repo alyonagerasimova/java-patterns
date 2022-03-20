@@ -17,7 +17,7 @@ public class StaticMethods {
 
     public static double getAvgPrice(Transport transport) {
         double sum = 0;
-        int size = transport.getSizeOfModels();
+        int size = transport.getSizeOfNotNullModels();
         for (int i = 0; i < size; i++) {
             double modelsPrice = transport.getModelsPrices()[i];
             sum += modelsPrice;
@@ -27,26 +27,26 @@ public class StaticMethods {
 
     public static void displayAllModels(Transport transport) {
         StringBuilder name = new StringBuilder();
-        for (int i = 0; i < transport.getSizeOfModels(); i++) {
+        for (int i = 0; i < transport.getSizeOfNotNullModels(); i++) {
             name.append(transport.getModelsName()[i]);
         }
-        System.out.println("Все модели для" + transport.getBrand() + name + ", ");
+        System.out.println("Все модели марки " + transport.getBrand() + ": " + name);
     }
 
     public static void displayAllPrices(Transport transport) {
         StringBuilder prices = new StringBuilder();
-        for (int i = 0; i < transport.getSizeOfModels(); i++) {
+        for (int i = 0; i < transport.getSizeOfNotNullModels(); i++) {
             prices.append(transport.getModelsPrices()[i]);
         }
-        System.out.println("Все модели для" + transport.getBrand() + "стоимостью" + prices + ", ");
+        System.out.println("Стоимость моделей марки" + transport.getBrand() + ": " + prices);
     }
 
     public static void displayNameModelWithPrices(Transport transport) {
         StringBuilder namesWithPrices = new StringBuilder();
         String[] names = transport.getModelsName();
         double[] prices = transport.getModelsPrices();
-        for (int i = 0; i < transport.getSizeOfModels(); i++) {
-            namesWithPrices.append(names[i]).append(" - ").append(prices[i]);
+        for (int i = 0; i < transport.getSizeOfNotNullModels(); i++) {
+            namesWithPrices.append(i + 1).append(". Name model: ").append(names[i]).append(", ").append("price: ").append(prices[i]);
         }
         System.out.println(namesWithPrices + ", ");
     }
