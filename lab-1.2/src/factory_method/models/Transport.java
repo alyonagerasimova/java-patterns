@@ -1,7 +1,6 @@
 package factory_method.models;
 
-import factory_method.exeption.DuplicateModelNameException;
-import factory_method.exeption.NoSuchModelNameException;
+import factory_method.exeption.*;
 
 public interface Transport extends Cloneable{
 

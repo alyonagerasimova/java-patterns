@@ -100,7 +100,21 @@ public class Motorcycle implements Transport {
         newModel.next = head;
         head.prev = newModel;
         newModel.prev = lastModel;
-        size++;
+        if(getSizeOfNotNullModels() == size) {
+            size++;
+        }
+    }
+
+    public int getSizeOfNotNullModels() {
+        int count = 0;
+        Model currentModel = head.next;
+        while (currentModel != head) {
+            if(currentModel.name != null) {
+                count++;
+            }
+            currentModel = currentModel.next;
+        }
+        return count;
     }
 
     public void removeModel(String name) throws NoSuchModelNameException {
@@ -123,18 +137,6 @@ public class Motorcycle implements Transport {
 
     public int getSizeOfModels(){
         return size;
-    }
-
-    @Override
-    public int getSizeOfNotNullModels() {
-        int count = size;
-        Model currentModel = head;
-        while(currentModel.next != head){
-            if (currentModel.next == null) {
-                count--;
-            }
-        }
-        return count;
     }
 
     public void checkBoundsOfPrice(double price) {

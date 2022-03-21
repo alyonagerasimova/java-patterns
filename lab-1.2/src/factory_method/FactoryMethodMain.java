@@ -7,51 +7,68 @@ import factory_method.models.*;
 public class FactoryMethodMain {
     public static void main(String[] args) {
         try {
-            Transport car = StaticMethods.createInstance("Mini", 2);
-            StaticMethods.setTransportFactory(new MotorcycleFactory());
-            Transport motorcycle = StaticMethods.createInstance("Yamaha", 4);
-            System.out.println("Current class = " + motorcycle.getClass().getName());
+            Transport car = StaticMethods.createInstance("AutoBrand", 2);
 
-            System.out.println("Current class = " + car.getClass().getName());
+            StaticMethods.setTransportFactory(new MotorcycleFactory());
+            Transport motorcycle = StaticMethods.createInstance("MotoBrand", 2);
+
+            System.out.println("Current class for motorcycle = " + motorcycle.getClass().getName());
+            System.out.println("Current class for car = " + car.getClass().getName());
+
+
             car.addModel("Mini Paceman", 1100);
+            car.addModel("Honda", 123);
+            car.addModel("BMW", 13532);
+            car.addModel("AUDI", 111.9);
+            car.addModel("Toyota", 391.92);
+            motorcycle.addModel("Yamaha", 9878);
+            motorcycle.addModel("YZ85", 1100);
+
             car.setModelNameByName("Mini Paceman", "Mini Cooper");
-            car.setPriceByNameModel("Mini Cooper", 3590000);
+            car.setPriceByNameModel("Mini Cooper", 35900);
+
             StaticMethods.displayAllModels(car);
             StaticMethods.displayNameModelWithPrices(car);
+            StaticMethods.getAvgPrice(car);
+            StaticMethods.displayAllPrices(car);
 
-            motorcycle.addModel("YZ85", 110000);
-//            motorcycle.setModelNameByName("YZ85", "YBR125");
-//            motorcycle.setPriceByNameModel("YBR125", 180000);
-//            StaticMethods.displayAllModels(motorcycle);
-//            StaticMethods.displayNameModelWithPrices(motorcycle);
+            motorcycle.setModelNameByName("YZ85", "YBR125");
+            motorcycle.setPriceByNameModel("YBR125", 1800);
+
+            StaticMethods.displayAllModels(motorcycle);
+            StaticMethods.displayNameModelWithPrices(motorcycle);
+            StaticMethods.getAvgPrice(motorcycle);
+            StaticMethods.displayAllPrices(motorcycle);
 
             var carClone = (Transport)car.clone();
-            carClone.setPriceByNameModel("Mini Cooper", 999);
+            car.setPriceByNameModel("Mini Cooper", 37900);
+
             var motorcycleClone = (Transport)motorcycle.clone();
-            motorcycleClone.setPriceByNameModel("YZ85", 999);
+            motorcycleClone.setPriceByNameModel("YBR125", 999);
+            motorcycle.setPriceByNameModel("YBR125", 1000);
 
             System.out.println("Transport car: ");
-            printVehicle(car);
+            printTransport(car);
             System.out.println("Transport car cloned: ");
-            printVehicle(carClone);
+            printTransport(carClone);
 
             System.out.println("Transport motorcycle: ");
-            printVehicle(motorcycle);
+            printTransport(motorcycle);
             System.out.println("Transport motorcycle cloned: ");
-            printVehicle(motorcycleClone);
+            printTransport(motorcycleClone);
 
         } catch (DuplicateModelNameException | ModelPriceOutOfBoundsException | NoSuchModelNameException | CloneNotSupportedException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private static void printVehicle(Transport transport) {
-        System.out.println("Transport: " + transport.getBrand());
-        System.out.println("Transport Names:");
+    private static void printTransport(Transport transport) {
+        System.out.println("Transport Brand: " + transport.getBrand());
+        System.out.println("Model names: ");
         printNames(transport);
-        System.out.println("Transport Prices:");
+        System.out.println("Prices:");
         printPrices(transport);
-        System.out.println("Transport Models Size:");
+        System.out.println("Models Size:");
         printSizeModels(transport);
     }
 
