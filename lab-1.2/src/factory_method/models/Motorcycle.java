@@ -131,12 +131,8 @@ public class Motorcycle implements Transport {
         throw new NoSuchModelNameException("Model with name " + name + " does not exist.");
     }
 
-    private boolean isEmpty(){
-        return size == 0;
-    }
-
     public int getSizeOfModels(){
-        return size;
+        return this.size;
     }
 
     public void checkBoundsOfPrice(double price) {
@@ -158,7 +154,7 @@ public class Motorcycle implements Transport {
     @Override
     public Object clone() throws CloneNotSupportedException {
         var clone = (Motorcycle)super.clone();
-        clone.head = (Model)head.clone();
+        clone.head = head.clone();
         clone.head.prev = clone.head;
         clone.head.next = clone.head;
 

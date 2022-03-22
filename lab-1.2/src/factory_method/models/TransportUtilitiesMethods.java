@@ -1,9 +1,8 @@
 package factory_method.models;
 
-import factory_method.factory.AutoFactory;
-import factory_method.factory.TransportFactory;
+import factory_method.factory.*;
 
-public class StaticMethods {
+public class TransportUtilitiesMethods {
 
     private static TransportFactory factory = new AutoFactory();
 
@@ -12,32 +11,34 @@ public class StaticMethods {
     }
 
     public static void setTransportFactory(TransportFactory transportFactory) {
-        StaticMethods.factory = transportFactory;
+        TransportUtilitiesMethods.factory = transportFactory;
     }
 
-    public static void getAvgPrice(Transport transport) {
+    public static double getAvgPrice(Transport transport) {
         double sum = 0;
         int size = transport.getSizeOfNotNullModels();
         double[] prices = transport.getModelsPrices();
         for (int i = 0; i < size; i++) {
-            double modelsPrice = prices[i];
-            sum += modelsPrice;
+            sum += prices[i];
         }
-        System.out.println("Среднее арифметическое цен моделей для " + transport.getBrand() + ": " + sum / size + "; \n");
+        return sum / size;
     }
 
     public static void displayAllModels(Transport transport) {
         StringBuilder name = new StringBuilder();
-        for (int i = 0; i < transport.getSizeOfNotNullModels(); i++) {
-            name.append(transport.getModelsName()[i]).append(", ");
+        int size = transport.getSizeOfNotNullModels();
+        String[] names = transport.getModelsName();
+        for (int i = 0; i < size; i++) {
+            name.append(names[i]).append(", ");
         }
         System.out.println("Все модели марки " + transport.getBrand() + ": " + name + "; \n");
     }
 
     public static void displayAllPrices(Transport transport) {
         StringBuilder pricesBuilder = new StringBuilder();
+        int size = transport.getSizeOfNotNullModels();
         double[] prices = transport.getModelsPrices();
-        for (int i = 0; i < transport.getSizeOfNotNullModels(); i++) {
+        for (int i = 0; i < size; i++) {
             pricesBuilder.append(prices[i]).append(", ");
         }
         System.out.println("Стоимость моделей марки " + transport.getBrand() + ": " + pricesBuilder + "; \n");
@@ -45,10 +46,12 @@ public class StaticMethods {
 
     public static void displayNameModelWithPrices(Transport transport) {
         StringBuilder namesWithPrices = new StringBuilder();
+        int size = transport.getSizeOfNotNullModels();
         String[] names = transport.getModelsName();
         double[] prices = transport.getModelsPrices();
-        for (int i = 0; i < transport.getSizeOfNotNullModels(); i++) {
-            namesWithPrices.append(i + 1).append(". Name model: ").append(names[i]).append(", ").append("price: ").append(prices[i]).append("; \n");
+        for (int i = 0; i < size; i++) {
+            namesWithPrices.append(i + 1).append(". Name model: ").append(names[i]).append(", ").append("price: ")
+                    .append(prices[i]).append("; \n");
         }
         System.out.println(namesWithPrices);
     }

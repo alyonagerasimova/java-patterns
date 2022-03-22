@@ -83,7 +83,7 @@ public class Auto implements Transport {
         return prices;
     }
 
-    public void addModel(String name, double price) throws DuplicateModelNameException, ModelPriceOutOfBoundsException {
+    public void addModel(String name, double price) throws DuplicateModelNameException {
         checkBoundsOfPrice(price);
         checkDuplicatedName(name);
 
@@ -152,7 +152,7 @@ public class Auto implements Transport {
         int i = 0;
         for (Model model : models) {
             if (model != null) {
-                clonedModels[i] = (Model) model.clone();
+                clonedModels[i] = model.clone();
                 i++;
             }
         }
