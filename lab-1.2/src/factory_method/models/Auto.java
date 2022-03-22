@@ -49,7 +49,7 @@ public class Auto implements Transport {
 
     private Model getModelByName(String name) throws NoSuchModelNameException {
         for (Model model : models) {
-            if (Objects.equals(model.name, name)) {
+            if (model != null && Objects.equals(model.name, name)) {
                 return model;
             }
         }

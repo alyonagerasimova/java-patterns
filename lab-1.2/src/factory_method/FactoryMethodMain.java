@@ -8,6 +8,7 @@ public class FactoryMethodMain {
     public static void main(String[] args) {
         try {
             Transport car = TransportUtilitiesMethods.createInstance("AutoBrand", 2);
+            car.getPriceByNameModel("gfg");
 
             TransportUtilitiesMethods.setTransportFactory(new MotorcycleFactory());
             Transport motorcycle = TransportUtilitiesMethods.createInstance("MotoBrand", 2);
