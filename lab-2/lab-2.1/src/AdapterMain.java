@@ -1,5 +1,6 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class AdapterMain {
 
@@ -11,9 +12,9 @@ public class AdapterMain {
             WriteStringToBytes adapter = new ByteAdapter(outputStream);
             adapter.writeString(strings);
 
-            var inputStream = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));
-            while (inputStream.ready()) {
-                System.out.println(inputStream.readLine());
+            var inputStream = new FileInputStream(filePath);
+            while (inputStream.available() > 0) {
+                System.out.println(inputStream.read());
             }
             inputStream.close();
         } catch (IOException e) {

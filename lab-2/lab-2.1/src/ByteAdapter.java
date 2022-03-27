@@ -3,17 +3,17 @@ import java.nio.charset.StandardCharsets;
 
 public class ByteAdapter implements WriteStringToBytes{
 
-    private final OutputStreamWriter streamWriter;
+    private final OutputStream outputStream;
 
     public ByteAdapter(OutputStream outputStream) {
-        this.streamWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+        this.outputStream = outputStream;
     }
 
     @Override
     public void writeString(String[] strings) throws IOException {
         for(String str : strings){
-            this.streamWriter.write(str);
+            this.outputStream.write(str.getBytes(StandardCharsets.UTF_8));
         }
-        this.streamWriter.flush();
+        this.outputStream.flush();
     }
 }
