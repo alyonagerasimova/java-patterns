@@ -13,7 +13,7 @@ public class ConfigManagerSingleton {
 
     public synchronized static ConfigManagerSingleton getInstance() throws IOException{
         if(configManagerSingleton == null){
-            configManagerSingleton = new ConfigManagerSingleton("lab-1.1/src/config.properties");
+            configManagerSingleton = new ConfigManagerSingleton("lab-1/lab-1.1/src/config.properties");
         }
         return configManagerSingleton;
     }
