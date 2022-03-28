@@ -12,9 +12,9 @@ public class AdapterMain {
             WriteStringToBytes adapter = new ByteAdapter(outputStream);
             adapter.writeString(strings);
 
-            var inputStream = new FileInputStream(filePath);
+            var inputStream = new DataInputStream(new FileInputStream(filePath));
             while (inputStream.available() > 0) {
-                System.out.println(inputStream.read());
+                System.out.println(inputStream.readLine());
             }
             inputStream.close();
         } catch (IOException e) {
