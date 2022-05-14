@@ -2,13 +2,15 @@ package com.javapatterns.lab2;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.shape.Circle;
 
 public class AppController {
 
-
     @FXML
     private Node autoElement;
+    @FXML
+    private Button startButton;
 
     @FXML
     private Circle redLight;
@@ -28,8 +30,10 @@ public class AppController {
         }
         if (mainAppFacade.isStarted()) {
             mainAppFacade.stopEmulation();
+            startButton.setText("Start");
         } else {
             mainAppFacade.startEmulation();
+            startButton.setText("Stop");
         }
     }
 }

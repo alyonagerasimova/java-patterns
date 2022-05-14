@@ -6,12 +6,11 @@ import javafx.util.Duration;
 
 public class Car {
     private final Node autoElement;
-
-    private boolean availableToGo = false;
+    private boolean canGo = false;
     private boolean isWait = false;
 
-    private final TranslateTransition startTransition = new TranslateTransition();
-    private final TranslateTransition finishTransition = new TranslateTransition();
+    private final TranslateTransition beforeTrafficLightTransition = new TranslateTransition();
+    private final TranslateTransition afterTrafficLightTransition = new TranslateTransition();
 
     public Car(Node autoElement) {
         this.autoElement = autoElement;
@@ -19,66 +18,62 @@ public class Car {
     }
 
     private void setupTransitions() {
-        startTransition.setDuration(Duration.millis(1000));
-        finishTransition.setDuration(Duration.millis(1500));
+        beforeTrafficLightTransition.setDuration(Duration.millis(1000));
+        afterTrafficLightTransition.setDuration(Duration.millis(2000));
 
-        startTransition.setByX(200);
-        finishTransition.setByX(500);
+        beforeTrafficLightTransition.setByX(238);
+        afterTrafficLightTransition.setByX(898);
 
-        startTransition.setCycleCount(1);
-        finishTransition.setCycleCount(1);
+        beforeTrafficLightTransition.setCycleCount(1);
+        afterTrafficLightTransition.setCycleCount(1);
 
-        startTransition.setAutoReverse(false);
-        finishTransition.setAutoReverse(false);
+        beforeTrafficLightTransition.setAutoReverse(false);
+        afterTrafficLightTransition.setAutoReverse(false);
 
-        startTransition.setOnFinished(actionEvent -> {
-            if (this.availableToGo) {
-                this.finishTransition.play();
+        beforeTrafficLightTransition.setOnFinished(actionEvent -> {
+            if (this.canGo) {
+                this.afterTrafficLightTransition.play();
                 isWait = false;
             } else {
                 isWait = true;
             }
         });
 
-        finishTransition.setOnFinished(actionEvent -> {
+        afterTrafficLightTransition.setOnFinished(actionEvent -> {
             this.autoElement.setTranslateX(0);
-            this.startTransition.play();
+            this.beforeTrafficLightTransition.play();
         });
 
-        startTransition.setNode(autoElement);
-        finishTransition.setNode(autoElement);
+        beforeTrafficLightTransition.setNode(autoElement);
+        afterTrafficLightTransition.setNode(autoElement);
     }
 
     public void start() {
-        this.startTransition.play();
+        this.beforeTrafficLightTransition.play();
     }
 
     public void resume() {
         if (isWait) {
             this.isWait = false;
-            this.finishTransition.play();
+            this.afterTrafficLightTransition.play();
         }
     }
 
     public void stop() {
-        startTransition.stop();
-        finishTransition.stop();
-        startTransition.jumpTo(Duration.millis(0));
-        finishTransition.jumpTo(Duration.millis(0));
+        beforeTrafficLightTransition.stop();
+        afterTrafficLightTransition.stop();
+        beforeTrafficLightTransition.jumpTo(Duration.millis(0));
+        afterTrafficLightTransition.jumpTo(Duration.millis(0));
 
         this.autoElement.setTranslateX(0);
     }
 
     public void setCanGo() {
-        availableToGo = true;
+        canGo = true;
     }
 
     public void setCanNotGo() {
-        availableToGo = false;
-    }
-
-    public void setIsWait(boolean isWait) {
-        this.isWait = isWait;
+        canGo = false;
     }
 
     public boolean IsWait() {
