@@ -22,15 +22,15 @@ public class AppFacade implements App {
 
     @Override
     public void stopEmulation() {
-        if (isStarted()) {
-            this.trafficLights.stop();
+        if (isStarted) {
+            this.stop();
             this.car.stop();
         }
     }
 
     @Override
     public boolean isStarted() {
-        return trafficLights.isStarted();
+        return isStarted;
     }
 
 
