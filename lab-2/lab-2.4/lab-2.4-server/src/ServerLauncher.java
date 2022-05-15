@@ -19,7 +19,7 @@ public class ServerLauncher {
     }
 
     public static void runTask(Socket clientSocket) {
-        System.out.println("Соединение с клиентом успешно: " + clientSocket.getLocalAddress() + ":" + clientSocket.getLocalPort());
+        System.out.println("Соединение с клиентом установлено: " + clientSocket.getLocalAddress() + ":" + clientSocket.getLocalPort());
         try (clientSocket) {
             var inputStream = new DataInputStream(clientSocket.getInputStream());
             var outputStream = new DataOutputStream(clientSocket.getOutputStream());

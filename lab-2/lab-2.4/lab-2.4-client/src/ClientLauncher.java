@@ -1,4 +1,3 @@
-import configs.Config;
 
 public class ClientLauncher {
 
@@ -10,10 +9,9 @@ public class ClientLauncher {
         }
         double a = Double.parseDouble(args[0]);
         double b = Double.parseDouble(args[1]);
-        var helper = new MultipleProxy();
-        var result = helper.multiple(a, b);
-        var client = new Client(Config.HOST, Config.PORT);
-        System.out.println("First Multiple result through a proxy: " + result);
-        System.out.println("Second Multiple result from client: " + client.multiple(a, b));
+
+        var multiplyService = new MultipleProxy();
+        var result = multiplyService.multiple(a, b);
+        System.out.println("Multiple result: " + result);
     }
 }

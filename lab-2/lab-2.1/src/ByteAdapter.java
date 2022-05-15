@@ -1,7 +1,6 @@
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
-public class ByteAdapter implements WriteStringToBytes{
+public class ByteAdapter implements ByteAdapterInterface {
 
     private final OutputStream outputStream;
 
@@ -12,7 +11,7 @@ public class ByteAdapter implements WriteStringToBytes{
     @Override
     public void writeString(String[] strings) throws IOException {
         for(String str : strings){
-            this.outputStream.write(str.getBytes(StandardCharsets.UTF_8));
+            this.outputStream.write(str.getBytes());
         }
         this.outputStream.flush();
     }
