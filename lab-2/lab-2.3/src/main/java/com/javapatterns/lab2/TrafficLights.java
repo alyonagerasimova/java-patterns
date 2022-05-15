@@ -1,48 +1,35 @@
 package com.javapatterns.lab2;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 public class TrafficLights {
-    public long timeout = 1000;
+    private final Circle redLight;
+    private final Circle greenLight;
+    private final Circle yellowLight;
 
-    private boolean isStarted = false;
-
-    private TrafficLightsActionHandler handler;
-
-    public boolean isStarted() {
-        return isStarted;
+    public TrafficLights(Circle redLight, Circle greenLight, Circle yellowLight){
+        this.redLight = redLight;
+        this.greenLight = greenLight;
+        this.yellowLight = yellowLight;
     }
 
-    public void setHandler(TrafficLightsActionHandler handler) {
-        this.handler = handler;
+    public void setRed(){
+        this.redLight.setFill(Color.RED);
+        this.greenLight.setFill(Color.BLACK);
+        this.yellowLight.setFill(Color.BLACK);
     }
 
-    public void stop() {
-        isStarted = false;
+    public void setGreen(){
+        this.greenLight.setFill(Color.GREEN);
+        this.yellowLight.setFill(Color.BLACK);
+        this.redLight.setFill(Color.BLACK);
     }
 
-    public void start() {
-        if (this.handler == null) {
-            return;
-        }
-        new Thread(() -> {
-            this.isStarted = true;
-            var thread = Thread.currentThread();
-            try {
-                while (isStarted && !thread.isInterrupted()) {
-                    synchronized (this) {
-                        this.handler.doAction(TrafficLightsActions.TO_GREEN);
-                        wait(this.timeout);
-                        this.handler.doAction(TrafficLightsActions.TO_YELLOW);
-                        wait(this.timeout);
-                        this.handler.doAction(TrafficLightsActions.TO_RED);
-                        wait(this.timeout);
-                        this.handler.doAction(TrafficLightsActions.TO_YELLOW);
-                        wait(this.timeout);
-                    }
-                }
-            } catch (InterruptedException e) {
-                this.isStarted = false;
-                e.printStackTrace();
-            }
-        }).start();
+    public void setYellow(){
+        this.greenLight.setFill(Color.BLACK);
+        this.yellowLight.setFill(Color.YELLOW);
+        this.redLight.setFill(Color.BLACK);
     }
+
 }
