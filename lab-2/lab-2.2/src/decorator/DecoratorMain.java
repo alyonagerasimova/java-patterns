@@ -20,6 +20,7 @@ public class DecoratorMain {
             car.addModel("AUDI", 111.9);
             car.addModel("Toyota", 391.92);
             car.removeModel("Honda");
+            car.setPriceByNameModel("BMW",15532);
             motorcycle.addModel("Yamaha", 9878);
             motorcycle.addModel("YZ85", 1100);
 

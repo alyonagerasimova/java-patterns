@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 public class AdapterMain {
 
     private static final String[] strings = new String[] {"1","2","3","4","Test","abc"};
-    private static final String filePath = "out/test.b";
+    private static final String filePath = "lab-2/lab-2.1/src/test.b";
 
     public static void main(String[] args){
         try(OutputStream outputStream = new FileOutputStream(filePath)){

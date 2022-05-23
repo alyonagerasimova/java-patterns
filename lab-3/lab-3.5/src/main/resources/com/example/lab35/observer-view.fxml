@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="389.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab35.ObserverController">
+   <children>
+      <Ellipse fill="#fff2e5fc" layoutX="192.0" layoutY="239.0" radiusX="124.0" radiusY="167.0" stroke="#00000013" strokeType="INSIDE" />
+      <Group fx:id="firstEye" layoutX="229.0" layoutY="238.0" onMouseClicked="#firstEyeClick">
+         <children>
+            <Ellipse centerX="28.0" centerY="17.0" fill="WHITE" layoutX="6.0" layoutY="-1.0" radiusX="26.0" radiusY="15.0" rotate="-1.1" stroke="#0000009d" strokeType="INSIDE" />
+            <Circle layoutX="33.0" layoutY="16.0" radius="14.0" stroke="BLACK" strokeType="INSIDE">
+               <fill>
+                  <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-173.66" radius="0.4541284403669725">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.6925926208496094" green="0.8565431833267212" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.007680491551459294">
+                           <color>
+                              <Color red="0.6925926208496094" green="0.8565431833267212" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.1291228085756302" green="0.7026432752609253" blue="0.9684210419654846" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Circle>
+            <Circle layoutX="33.0" layoutY="16.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Group>
+      <QuadCurve fx:id="mouth" controlX="-9.999969482421875" controlY="-166.39999389648438" endX="33.000030517578125" endY="-212.79998779296875" fill="#ff8181" layoutX="202.0" layoutY="552.0" onMouseClicked="#mouthClick" startX="-52.600006103515625" startY="-212.79998779296875" stroke="#00000038" strokeType="INSIDE" />
+      <Polyline fx:id="nose" fill="#ffdbb2" layoutX="211.0" layoutY="263.0" onMouseClicked="#noseClick" points="-17.999969482421875, -9.0, 4.800018310546875, 33.800018310546875, -17.999969482421875, 48.0, -39.999969482421875, 33.800018310546875" strokeType="INSIDE" strokeWidth="0.0" />
+      <CubicCurve controlX1="-168.19998168945312" controlX2="116.60000610351562" controlY1="-51.400001525878906" controlY2="-51.400001525878906" endX="97.0" endY="182.1999969482422" fill="#52a6ff" layoutX="219.0" layoutY="39.0" startX="-151.0" startY="182.1999969482422" stroke="#00000025" />
+      <Group fx:id="secondEye" layoutX="92.0" layoutY="238.0" onMouseClicked="#secondClick" rotate="180.0">
+         <children>
+            <Ellipse centerX="28.0" centerY="17.0" fill="WHITE" layoutX="6.0" layoutY="-1.0" radiusX="26.0" radiusY="15.0" rotate="1.0" stroke="#0000009d" strokeType="INSIDE" />
+            <Circle layoutX="33.0" layoutY="16.0" radius="14.0" stroke="BLACK" strokeType="INSIDE">
+               <fill>
+                  <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-173.66" radius="0.4541284403669725">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.6925926208496094" green="0.8565431833267212" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.007680491551459294">
+                           <color>
+                              <Color red="0.6925926208496094" green="0.8565431833267212" blue="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.1291228085756302" green="0.7026432752609253" blue="0.9684210419654846" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Circle>
+            <Circle layoutX="33.0" layoutY="16.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </Group>
+   </children>
+</Pane>

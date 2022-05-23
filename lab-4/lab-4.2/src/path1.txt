@@ -1,0 +1,12 @@
+car
+5
+Mini Paceman
+Honda
+BMW
+AUDI
+Toyota
+1100.0
+123.0
+13532.0
+111.9
+391.92
