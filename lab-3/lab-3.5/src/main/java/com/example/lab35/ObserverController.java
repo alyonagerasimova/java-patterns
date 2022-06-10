@@ -23,14 +23,13 @@ public class ObserverController {
     @FXML
     public Group secondEye;
 
-    private final ArrayList<Observer> subscriptions = new ArrayList<>(4);
-    private final Subject subject = new FaceSubject();
+    private final FaceSubject subject = new FaceSubject();
 
     public void initSubscriptions() {
-        subscriptions.add(subject.subscribe(new NoseObserver(nose)));
-        subscriptions.add(subject.subscribe(new MouthObserver(mouth)));
-        subscriptions.add(subject.subscribe(new EyeObserver(firstEye, FaceAction.FIRST_EYE)));
-        subscriptions.add(subject.subscribe(new EyeObserver(secondEye, FaceAction.SECOND_EYE)));
+        subject.subscribe(new NoseObserver(nose));
+        subject.subscribe(new MouthObserver(mouth));
+        subject.subscribe(new EyeObserver(firstEye, FaceAction.FIRST_EYE));
+        subject.subscribe(new EyeObserver(secondEye, FaceAction.SECOND_EYE));
     }
 
     public void mouthClick() {
@@ -49,10 +48,12 @@ public class ObserverController {
         subject.notifyObserver(FaceAction.SECOND_EYE);
     }
 
-    protected void unsubscribeClick() {
-        for (Observer subscription : subscriptions) {
-            subject.unsubscribe(subscription);
-        }
-        subscriptions.clear();
-    }
+//    private final ArrayList<Observer> subscriptions = subject.getObservers();
+//
+//    protected void unsubscribeClick() {
+//        for (Observer subscription : subscriptions) {
+//            subject.unsubscribe(subscription);
+//        }
+//        subscriptions.clear();
+//    }
 }

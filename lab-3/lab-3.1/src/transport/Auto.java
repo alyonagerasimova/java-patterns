@@ -1,12 +1,10 @@
-package models;
+package transport;
 
-import factory_method.exeption.DuplicateModelNameException;
-import factory_method.exeption.ModelPriceOutOfBoundsException;
-import factory_method.exeption.NoSuchModelNameException;
-import factory_method.models.Transport;
+import exeption.DuplicateModelNameException;
+import exeption.ModelPriceOutOfBoundsException;
+import exeption.NoSuchModelNameException;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Objects;
 
 public class Auto implements Transport {
@@ -163,11 +161,7 @@ public class Auto implements Transport {
         return clone;
     }
 
-    public Iterator<Model> iterator() {
-        return new AutoIterator();
-    }
-
-    protected static class Model implements Cloneable{
+    private class Model implements Cloneable {
         private String name;
         private double price;
 
@@ -193,25 +187,6 @@ public class Auto implements Transport {
             clone.name = this.name;
             clone.price = this.price;
             return clone;
-        }
-
-        @Override
-        public String toString() {
-            return "Модель: " + this.name + "; Цена: "+ this.price;
-        }
-    }
-
-    private class AutoIterator implements Iterator<Model>{
-        private int index = 0;
-
-        @Override
-        public boolean hasNext() {
-            return this.index < models.length;
-        }
-
-        @Override
-        public Model next() {
-            return models[index++];
         }
     }
 }

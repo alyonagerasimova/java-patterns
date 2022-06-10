@@ -1,0 +1,9 @@
+
+Transport brand: car
+Transport models: 
+ name: Model 1, price: 23.0 
+ name: Model 2, price: 543.0 
+ name: Model 3, price: 73.0 
+ name: Model 4, price: 981.0 
+
+Transport brand: motorcycle; modelName: Model 1,  price: 23.0; modelName: Model 2,  price: 543.0; 

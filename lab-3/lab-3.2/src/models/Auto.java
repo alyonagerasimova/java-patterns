@@ -1,3 +1,5 @@
+package models;
+
 import factory_method.exeption.DuplicateModelNameException;
 import factory_method.exeption.ModelPriceOutOfBoundsException;
 import factory_method.exeption.NoSuchModelNameException;
@@ -19,19 +21,8 @@ public class Auto implements Transport {
         this.models = new Model[sizeOfModels];
     }
 
-    public void print(Writer writer) {
-        if (printCommand != null) {
-            this.writer = writer;
-            printCommand.printToFile();
-        }
-    }
-
     public Writer getWriter() {
         return writer;
-    }
-
-    public void setPrintCommand(Command command) {
-        printCommand = command;
     }
 
     public String getBrand() {
@@ -161,6 +152,17 @@ public class Auto implements Transport {
             }
         }
         return count;
+    }
+
+    public void setPrintCommand(Command command) {
+        this.printCommand = command;
+    }
+
+    public void print(Writer writer) {
+        if (this.printCommand != null) {
+            this.writer = writer;
+            this.printCommand.printToFile();
+        }
     }
 
     @Override

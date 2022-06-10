@@ -1,4 +1,7 @@
 import factory_method.exeption.DuplicateModelNameException;
+import models.Auto;
+import models.ColumnCommand;
+import models.RowCommand;
 
 import java.io.FileWriter;
 
@@ -12,17 +15,17 @@ public class CommandMain {
         var rowCommand = new RowCommand(auto);
         var columnCommand = new ColumnCommand(auto);
 
-//        System.out.println("Test rowCommand");
-//        auto.setPrintCommand(rowCommand);
-//        test(auto);
-
-        System.out.println("Test columnCommand");
-        auto.setPrintCommand(columnCommand);
+        System.out.println("Test rowCommand");
+        auto.setPrintCommand(rowCommand);
         test(auto);
+
+//        System.out.println("Test columnCommand");
+//        auto.setPrintCommand(columnCommand);
+//        test(auto);
     }
 
     private static void test(Auto auto) {
-        try (var writer = new FileWriter("lab-3/lab-3.2/command.txt", true)) {
+        try (var writer = new FileWriter("lab-3/lab-3.2/command.txt")) {
             auto.print(writer);
         } catch (Exception ex) {
             ex.printStackTrace();

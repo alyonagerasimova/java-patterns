@@ -11,9 +11,8 @@ public class FaceSubject implements Subject {
     }
 
     @Override
-    public Observer subscribe(Observer observer) {
+    public void subscribe(Observer observer) {
         this.observers.add(observer);
-        return observer;
     }
 
     @Override
@@ -27,4 +26,8 @@ public class FaceSubject implements Subject {
             observer.update(action);
         }
     }
+
+//    public ArrayList<Observer> getObservers(){
+//        return this.observers;
+//    }
 }

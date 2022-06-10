@@ -1,13 +1,12 @@
+package models;
+
 import factory_method.exeption.NoSuchModelNameException;
 import factory_method.models.Transport;
 
-import java.util.Arrays;
-
-public class RowCommand implements Command{
+public class ColumnCommand implements Command{
 
     private final Auto auto;
-
-    public RowCommand(Auto auto) {
+    public ColumnCommand(Auto auto) {
         this.auto = auto;
     }
 
@@ -16,26 +15,28 @@ public class RowCommand implements Command{
         var writer = auto.getWriter();
         try {
             writer.write("\n");
-            writer.write(writeToString(auto));
+            writer.write(writeToColumn(auto));
             writer.flush();
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    private String writeToString(Transport transport) {
+    private String writeToColumn(Transport transport) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Transport brand: ").append(transport.getBrand()).append("; ");
+        builder.append("Transport brand: ").append(transport.getBrand()).append("\n");
         var modelsNames = transport.getModelsName();
-        Arrays.stream(modelsNames).forEachOrdered(name -> {
-            builder.append("modelName: ").append(name).append(", ");
+        builder.append("Transport models: \n");
+        for (String name : modelsNames) {
+            builder.append(" name: ").append(name);
             try {
                 var price = transport.getPriceByNameModel(name);
-                builder.append(" price: ").append(price).append("; ");
+                builder.append(", price: ").append(price);
             } catch (NoSuchModelNameException e) {
                 e.printStackTrace();
             }
-        });
+            builder.append(" \n");
+        };
         builder.append("\n");
         return builder.toString();
     }

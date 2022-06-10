@@ -1,14 +1,13 @@
 package models;
 
-import factory_method.exeption.NoSuchModelNameException;
-import factory_method.models.Transport;
+import exeption.NoSuchModelNameException;
+import transport.Transport;
+
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 
-public class OutputInRow implements HelpHandler {
-
-    private HelpHandler handler;
+public class OutputInRow implements WriteHandler{
+    private WriteHandler handler;
     private final Writer writer;
 
     public OutputInRow(Writer writer) {
@@ -29,7 +28,7 @@ public class OutputInRow implements HelpHandler {
         StringBuilder builder = new StringBuilder();
         builder.append("Transport brand: ").append(transport.getBrand()).append("; ");
         var modelsNames = transport.getModelsName();
-        Arrays.stream(modelsNames).forEachOrdered(name -> {
+        for (String name : modelsNames) {
             builder.append("modelName: ").append(name).append(", ");
             try {
                 var price = transport.getPriceByNameModel(name);
@@ -37,13 +36,13 @@ public class OutputInRow implements HelpHandler {
             } catch (NoSuchModelNameException e) {
                 e.printStackTrace();
             }
-        });
+        };
         builder.append("\n");
         return builder.toString();
     }
 
     @Override
-    public void setHandler(HelpHandler handler) {
+    public void setNext(WriteHandler handler) {
         this.handler = handler;
     }
 }
